@@ -32,7 +32,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
-      DB_URL: jdbc:postgresql://postgres:5431/${POSTGRES_DB:-ordermanagement}
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ordermanagement}
       DB_USERNAME: ${POSTGRES_USER:-akhoa1101-docker}
       DB_PASSWORD: ${POSTGRES_PASSWORD:-QAZOKM}
     ports:
