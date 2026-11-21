@@ -1,0 +1,14 @@
+target/
+.git/
+.gitignore
+.gitattributes
+.idea/
+.vscode/
+*.iml
+.env
+.env.*
+!.env.example
+README.md
+HELP.md
+Dockerfile
+compose.yaml
