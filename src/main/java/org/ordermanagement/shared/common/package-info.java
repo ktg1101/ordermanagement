@@ -4,4 +4,4 @@
  * <p>Quy tắc: {@code common} không được phụ thuộc vào bất kỳ feature nào.
  * Chỉ đưa vào đây những thứ thực sự dùng bởi từ hai feature trở lên.
  */
-package org.ordermanagement.common;
+package org.ordermanagement.shared.common;
