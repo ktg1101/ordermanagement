@@ -1,0 +1,49 @@
+name: ordermanagement
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: ordermanagement-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ordermanagement}
+      POSTGRES_USER: ${POSTGRES_USER:-ordermanagement}
+      # Giá trị mặc định chỉ dành cho máy local. Môi trường thật phải đặt qua .env.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ordermanagement}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ordermanagement:latest
+    container_name: ordermanagement-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-prod}
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ordermanagement}
+      DB_USERNAME: ${POSTGRES_USER:-ordermanagement}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-ordermanagement}
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/actuator/health/readiness"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 40s
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

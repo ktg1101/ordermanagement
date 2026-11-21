@@ -1,0 +1,88 @@
+# Cấu hình chung cho mọi môi trường.
+# Môi trường được chọn bằng SPRING_PROFILES_ACTIVE (mặc định: dev).
+# Mọi giá trị nhạy cảm đều đọc từ biến môi trường, không commit secret vào repo.
+spring:
+  application:
+    name: ordermanagement
+  profiles:
+    default: dev
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/ordermanagement}
+    username: ${DB_USERNAME:ordermanagement}
+    password: ${DB_PASSWORD:ordermanagement}
+    hikari:
+      pool-name: ordermanagement-pool
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:10}
+      minimum-idle: ${DB_POOL_MIN_IDLE:2}
+      connection-timeout: 10000
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      # Schema do Flyway quản lý; Hibernate chỉ kiểm tra khớp, không tự sửa schema.
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: never
+      group:
+        # Readiness chỉ UP khi kết nối được PostgreSQL.
+        readiness:
+          include: readinessState,db
+
+---
+# Môi trường phát triển local: chạy app từ IDE/mvnw, PostgreSQL chạy bằng
+# `docker compose up -d postgres`.
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+logging:
+  level:
+    org.ordermanagement: DEBUG
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+---
+# Môi trường triển khai: bắt buộc cung cấp thông tin DB qua biến môi trường
+# (không có giá trị mặc định, thiếu là app không khởi động).
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+logging:
+  level:
+    root: INFO
+    org.ordermanagement: INFO
