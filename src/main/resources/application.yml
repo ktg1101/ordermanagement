@@ -63,7 +63,7 @@ spring:
 
 logging:
   level:
-    org.ordermanagement: DEBUG
+    com.ordermanagement: DEBUG
 
 management:
   endpoint:
@@ -85,4 +85,4 @@ spring:
 logging:
   level:
     root: INFO
-    org.ordermanagement: INFO
+    com.ordermanagement: INFO
