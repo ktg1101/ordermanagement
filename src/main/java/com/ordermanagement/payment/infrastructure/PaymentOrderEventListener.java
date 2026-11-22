@@ -1,6 +1,7 @@
 package com.ordermanagement.payment.infrastructure;
 
 import com.ordermanagement.order.application.OrderCancelledEvent;
+import com.ordermanagement.payment.application.PaymentService;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
