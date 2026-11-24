@@ -27,6 +27,17 @@ $env:VITE_API_TARGET="http://localhost:9090"; npm run dev
 
 Các lệnh khác: `npm run typecheck`, `npm run build` (kiểm tra kiểu + build ra `dist/`), `npm run preview`.
 
+## Chạy bằng Docker
+
+Từ thư mục gốc dự án, một lệnh chạy cả PostgreSQL + backend + giao diện:
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+Mở http://localhost:3000 (đổi bằng `FRONTEND_PORT`). Container `frontend` dùng nginx phục vụ bản build và proxy `/api`, `/actuator` sang service `app`, nên không cần cấu hình CORS.
+
 ## Các tab
 
 | Tab | Dùng để |

@@ -49,6 +49,8 @@ Chọn profile bằng `SPRING_PROFILES_ACTIVE`. Schema do Flyway quản lý (`db
 # Chạy toàn bộ bằng Docker
 cp .env.example .env
 docker compose up --build
+# Giao diện test:  http://localhost:3000   (cổng đổi bằng FRONTEND_PORT)
+# API trực tiếp:   http://localhost:8080
 
 # Chạy local (PostgreSQL bằng Docker, app bằng Maven)
 docker compose up -d postgres

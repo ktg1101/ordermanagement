@@ -12,3 +12,5 @@ README.md
 HELP.md
 Dockerfile
 compose.yaml
+# Frontend có Dockerfile và build context riêng (./frontend)
+frontend/
